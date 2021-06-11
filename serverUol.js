@@ -39,15 +39,21 @@ app.get("/participants",(req,res)=>{
 
 app.post("/messages",(req,res)=>{
     let message=req.body;
-    let newMessage={
-        from:req.headers.user,
-        to: message.to,
-        text: message.text,
-        type: message.type,
-        time: dayjs().format('HH:mm:ss')
+    if((message.to && req.headers.user)
+    && (message.type==="message" || message.type==="private_message")
+    && participants.find((r)=>r.name===req.headers.user)){
+        let newMessage={
+            from:req.headers.user,
+            to: message.to,
+            text: message.text,
+            type: message.type,
+            time: dayjs().format('HH:mm:ss')
+        }
+        messages.push(newMessage)
+        res.sendStatus(200)
+    }else{
+        res.sendStatus(400)
     }
-    messages.push(newMessage)
-    res.sendStatus(200)
 })
 
 app.get("/messages",(req,res)=>{

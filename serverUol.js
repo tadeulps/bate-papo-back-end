@@ -27,6 +27,7 @@ app.post("/participants",(req,res)=>{
         messages.push(joiningMessage)
         participants.push(newParticipant)
         res.send(newParticipant)
+        res.sendStatus(200)
     }else{
         res.sendStatus(400)
     }
@@ -73,5 +74,18 @@ app.post("/status",(req,res)=>{
     }
     
 })
-
-app.listen(5000);
+setInterval(()=>{
+    participants.forEach((r,i)=>{
+        if((Date.now() - r.lastStatus)>10000){
+            messages.push(
+            {from:r.name,
+            to: 'Todos',
+            text: 'sai da sala...',
+            type: 'status',
+            time: dayjs().format('HH:mm:ss')})
+            participants.splice(i,1)
+        }
+    })
+    }
+    ,15000)
+app.listen(4000);

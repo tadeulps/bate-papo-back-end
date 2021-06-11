@@ -25,8 +25,7 @@ app.post("/participants",(req,res)=>{
         time: dayjs().format('HH:mm:ss')
         }
         messages.push(joiningMessage)
-        participants.push(newParticipant)
-        res.send(newParticipant)
+        participants.push(newParticipant)  
         res.sendStatus(200)
     }else{
         res.sendStatus(400)
